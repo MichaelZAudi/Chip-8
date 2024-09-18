@@ -6,5 +6,5 @@ using namespace std;
 int main(int argc, char *argv[]){
     chip8 test; 
     test.cycle();
+    test.loadROM(argv[1]);
 }
-
