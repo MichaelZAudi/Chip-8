@@ -2,7 +2,7 @@
 #define CHIP8_H
 
 
-class chip8{
+class Chip8{
     public:
         u_int8_t V[16]{0};
         u_int8_t sysMemory[4096]{0};
@@ -11,7 +11,7 @@ class chip8{
         u_int8_t soundTimer{0};
         u_int8_t inputKeys[16]{0};
         u_int16_t stack[16]{0};
-        u_int16_t indexRegister{0};
+        u_int16_t I{0};
         u_int16_t programCounter{0};
         u_int16_t opcode{0};
         u_int32_t videoOut[64 * 32]{0};
@@ -36,11 +36,11 @@ class chip8{
         0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
 
-        chip8();
+        Chip8();
         void cycle();
         void loadROM(char const* romName);
 
-        
+        void OP_00E0();
 };
 
 #endif

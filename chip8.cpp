@@ -2,7 +2,7 @@
 #include <fstream>
 #include "chip8.h"
 
-chip8::chip8(){
+Chip8::Chip8(){
     programCounter = 0x200;
 
     for(int i = 0; i < 80; i++){
@@ -10,14 +10,25 @@ chip8::chip8(){
     }
 }
 
-void chip8::cycle(){
+void Chip8::cycle(){
     std::cout << "cycle works\n";
 }
 
-void chip8::loadROM(char const* romName){
+void Chip8::loadROM(char const* romName){
     std::ifstream romFile(romName, std::ios::binary | std::ios::ate);
 
     if(romFile.is_open()){
         std::streampos size = romFile.tellg();
+        char* bufferArray = new char[size];
+
+        romFile.seekg(0, std::ios::beg);
+        romFile.read(bufferArray, size);
+
+        for(int i = 0; i < size; i++){
+            sysMemory[0x200 + i] = bufferArray[i];
+        }
+
+        delete[] bufferArray;
+        romFile.close();
     }
 }

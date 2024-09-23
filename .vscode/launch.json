@@ -8,6 +8,10 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/program.exe",
+        "args": [
+            "IBM Logo.ch8",
+            20, 0
+         ],
         "cwd": "${workspaceFolder}",
         "preLaunchTask": "make program.exe",
         "setupCommands": [
