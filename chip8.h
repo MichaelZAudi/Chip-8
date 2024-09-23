@@ -4,17 +4,17 @@
 
 class chip8{
     public:
-        u_int8_t V[16]{};
-        u_int8_t sysMemory[4096]{};
-        u_int8_t stackPointer{};
-        u_int8_t delayTimer{};
-        u_int8_t soundTimer{};
-        u_int8_t inputKeys[16]{};
-        u_int16_t stack[16]{};
-        u_int16_t indexRegister{};
-        u_int16_t programCounter{};
-        u_int16_t opcode;
-        u_int32_t videoOut[64 * 32]{};
+        u_int8_t V[16]{0};
+        u_int8_t sysMemory[4096]{0};
+        u_int8_t stackPointer{0};
+        u_int8_t delayTimer{0};
+        u_int8_t soundTimer{0};
+        u_int8_t inputKeys[16]{0};
+        u_int16_t stack[16]{0};
+        u_int16_t indexRegister{0};
+        u_int16_t programCounter{0};
+        u_int16_t opcode{0};
+        u_int32_t videoOut[64 * 32]{0};
 
         u_int8_t fontset[80] =
         {
@@ -40,7 +40,7 @@ class chip8{
         void cycle();
         void loadROM(char const* romName);
 
-
+        
 };
 
 #endif
