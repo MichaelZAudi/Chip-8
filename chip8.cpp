@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
+#include <random>
 #include "chip8.h"
 
 Chip8::Chip8(){
@@ -11,7 +13,20 @@ Chip8::Chip8(){
 }
 
 void Chip8::cycle(){
-    std::cout << "cycle works\n";
+    opcode = sysMemory[programCounter] << 8 | sysMemory[programCounter + 1];
+    programCounter += 2;
+    switch(opcode){
+
+        default:
+            std::cout << "Invalid opcode." << std::endl;
+            break;
+    }
+    if(delayTimer > 0){
+        delayTimer--;
+    };
+    if(soundTimer > 0){
+        soundTimer--;
+    }
 }
 
 void Chip8::loadROM(char const* romName){
@@ -31,4 +46,12 @@ void Chip8::loadROM(char const* romName){
         delete[] bufferArray;
         romFile.close();
     }
+}
+
+void Chip8::OP_00E0(){
+    std::memset(videoOut, 0, sizeof(videoOut));
+}
+
+void Chip8::OP_00EE(){
+
 }

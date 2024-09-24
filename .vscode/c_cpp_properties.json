@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/michael/Desktop/Chip-8/**",
+                "*/usr/include/SDL2"
+            ],
+            "defines": [],
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "mergeConfigurations": false,
+            "compilerPath": "/usr/bin/g++",
+            "browse": {
+                "path": [
+                    "/home/michael/Desktop/Chip-8/**",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

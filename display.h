@@ -21,7 +21,8 @@ class Display{
     
     void clearScreen();
 
-    void updateScreen();
+    void updateScreen(u_int32_t* videoOut, int videoPitch);
+
 };
 
 

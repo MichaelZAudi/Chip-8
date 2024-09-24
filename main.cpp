@@ -20,6 +20,6 @@ int main(int argc, char* argv[]){
     test.cycle();
     test.loadROM(argv[1]);
     while(true){
-        cat.clearScreen();
+        cat.updateScreen(test.videoOut, test.videoOut[0] * 64);
     }
 }
