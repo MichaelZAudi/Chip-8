@@ -9,8 +9,6 @@ class Display{
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* texture;
-    u_int32_t backgroundColor = 0xFFFFFFFF;
-    u_int32_t textColor = 0x00000000;
     // Set the default height and width of the Chip-8 output.
     int height = 32;
     int width = 64;
@@ -23,6 +21,20 @@ class Display{
 
     void updateScreen(u_int32_t* videoOut, int videoPitch);
 
+    void keyProcessing(u_int8_t* key){
+        bool exit = false;
+
+        SDL_Event keyPress;
+
+        while(SDL_PollEvent(&event)){
+            switch(event.type){
+                case SDL_Quit:
+                    exit = true;
+                    break;
+                case SDL_KEYDOWN:
+            }
+        }
+    }
 };
 
 

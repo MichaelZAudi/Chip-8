@@ -13,6 +13,7 @@ Display::~Display(){
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_Quit();
 }
 
 
@@ -22,3 +23,5 @@ void Display::updateScreen(u_int32_t* videoOut, int videoPitch){
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 }
+
+void 
