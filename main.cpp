@@ -14,11 +14,10 @@ int main(int argc, char* argv[]){
         cout << "Incorrect number of command line arguments.\n";
         return 0;
     }
-    Chip8 test;
+    Chip8 chip;
     
     Display cat(argv[1], stoi(argv[2]));
-    test.cycle();
-    test.loadROM(argv[1]);
+    chip.loadROM(argv[1]);
     while(true){
         cat.updateScreen(test.videoOut, test.videoOut[0] * 64);
     }
