@@ -16,9 +16,9 @@ Chip8::Chip8(){
 void Chip8::cycle(){
     opcode = (sysMemory[programCounter] << 8) | sysMemory[programCounter + 1];
     programCounter += 2;
-    switch(opcode & 0xF000){
+    switch((opcode & 0xF000) >> 12u){
         case(0x0):
-            switch(opcode){
+            switch(opcode & 0x000Fu){
                 case(0x0):
                     Chip8::OP_00E0();
                     break;
@@ -29,6 +29,7 @@ void Chip8::cycle(){
                     std::cout << "Invalid opcode." << std::endl;
                     break;
             }
+            break;
         case(0x1):
             Chip8::OP_1NNN();
             break;
@@ -51,7 +52,7 @@ void Chip8::cycle(){
             Chip8::OP_7XNN();
             break;
         case(0x8):
-            switch(opcode){
+            switch(opcode & 0x000Fu){
                 case(0x0):
                     Chip8::OP_8XY0();
                     break;
@@ -83,6 +84,7 @@ void Chip8::cycle(){
                     std::cout << "Invalid opcode." << std::endl;
                     break;
             }
+            break;
         case(0x9):
             Chip8::OP_9XY0();
             break;
@@ -99,7 +101,7 @@ void Chip8::cycle(){
             Chip8::OP_DXYN();
             break;
         case(0xE):
-            switch(opcode){
+            switch(opcode & 0x00FFu){
                 case(0x9E):
                     Chip8::OP_EX9E();
                     break;
@@ -110,8 +112,9 @@ void Chip8::cycle(){
                     std::cout << "Invalid opcode." << std::endl;
                     break;
             }
+            break;
         case(0xF):
-            switch(opcode){
+            switch(opcode & 0x00FFu){
                 case(0x07):
                     Chip8::OP_FX07();
                     break;
@@ -143,6 +146,7 @@ void Chip8::cycle(){
                     std::cout << "Invalid opcode." << std::endl;
                     break;
             }
+            break;
         default:
             std::cout << "Invalid opcode." << std::endl;
             break;
@@ -304,6 +308,7 @@ void Chip8::OP_8XYE(){
     V[15] = (V[X] & 0x80u) >> 7u;
     V[X] = V[X] << 1;
 }
+
 void Chip8::OP_9XY0(){
     u_int8_t X = (opcode & 0x0F00u) >> 8u;
     u_int8_t Y = (opcode & 0x00F0u) >> 4u;
@@ -323,7 +328,7 @@ void Chip8::OP_BNNN(){
 void Chip8::OP_CXNN(){
     u_int8_t X = (opcode & 0x0F00u) >> 8u;
     u_int8_t NN = opcode & 0x00FFu;
-    std::srand(std::time(0));
+    std::srand(std::time(nullptr));
     V[X] = u_int8_t(std::rand() % 255) & NN;
 }
 
@@ -331,6 +336,26 @@ void Chip8::OP_DXYN(){
     u_int8_t X = (opcode & 0x0F00u) >> 8u;
     u_int8_t Y = (opcode & 0x00F0u) >> 4u;
     u_int8_t N = opcode & 0x000Fu;
+
+    u_int8_t xPosition = V[X] % 64;
+    u_int8_t yPosition = V[Y] % 32;
+
+    V[15] = 0;
+
+    for(int row = 0; row < N; row++){
+        u_int8_t sprite = sysMemory[I + row];
+        for(int column = 0; column < 8; column++){
+            u_int8_t pixel = sprite & (0x80u >> column);
+            u_int32_t* screen = &videoOut[(yPosition + row) * 64 + (xPosition + column)];
+            if(pixel){
+                if(*screen == 0xFFFFFFF){
+                    V[15] = 1;
+                }
+
+                *screen ^= 0xFFFFFFFF;
+            }
+        }
+    }
 }
 
 void Chip8::OP_EX9E(){
@@ -355,7 +380,59 @@ void Chip8::OP_FX07(){
 }
 
 void Chip8::OP_FX0A(){
+    u_int8_t X = (opcode & 0x0F00u) >> 8u;
 
+    if(inputKeys[0]){
+        V[X] = 0;
+    }
+    else if(inputKeys[1]){
+        V[X] = 1;
+    }
+    else if(inputKeys[2]){
+        V[X] = 2;
+    }
+    else if(inputKeys[3]){
+        V[X] = 3;
+    }
+    else if(inputKeys[4]){
+        V[X] = 4;
+    }
+    else if(inputKeys[5]){
+        V[X] = 5;
+    }
+    else if(inputKeys[6]){
+        V[X] = 6;
+    }
+    else if(inputKeys[7]){
+        V[X] = 7;
+    }
+    else if(inputKeys[8]){
+        V[X] = 8;
+    }
+    else if(inputKeys[9]){
+        V[X] = 9;
+    }
+    else if(inputKeys[10]){
+        V[X] = 10;
+    }
+    else if(inputKeys[11]){
+        V[X] = 11;
+    }
+    else if(inputKeys[12]){
+        V[X] = 12;
+    }
+    else if(inputKeys[13]){
+        V[X] = 13;
+    }
+    else if(inputKeys[14]){
+        V[X] = 14;
+    }
+    else if(inputKeys[15]){
+        V[X] = 15;
+    }
+    else{
+        programCounter -= 2;
+    }
 }
 
 void Chip8::OP_FX15(){
@@ -390,14 +467,14 @@ void Chip8::OP_FX33(){
 
 void Chip8::OP_FX55(){
     u_int8_t X = (opcode & 0x0F00u) >> 8u;
-    for(u_int8_t i; i <= X, i++){
+    for(u_int8_t i = 0; i <= X; i++){
         sysMemory[I + i] = V[i];
     }
 }
 
 void Chip8::OP_FX65(){
     u_int8_t X = (opcode & 0x0F00u) >> 8u;
-    for(u_int8_t i; i <= X; i++){
+    for(u_int8_t i = 0; i <= X; i++){
         V[i] = sysMemory[I + i];
     }
 }

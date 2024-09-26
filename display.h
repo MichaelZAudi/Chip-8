@@ -21,22 +21,7 @@ class Display{
 
     void updateScreen(u_int32_t* videoOut, int videoPitch);
 
-    void keyProcessing(u_int8_t* key){
-        bool exit = false;
-
-        SDL_Event keyPress;
-
-        while(SDL_PollEvent(&event)){
-            switch(event.type){
-                case SDL_Quit:
-                    exit = true;
-                    break;
-                case SDL_KEYDOWN:
-            }
-        }
-    }
+    bool keyProcessing(u_int8_t* key);
 };
-
-
 
 #endif
